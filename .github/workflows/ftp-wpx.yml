@@ -1,0 +1,31 @@
+name: FTP to
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  ftp-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Sync files for public_html
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.WPX_FTP_SERVER }}
+          username: ${{ secrets.WPX_FTP_USERNAME }}
+          password: ${{ secrets.WPX_FTP_PASSWORD }}
+          server-dir: ${{ secrets.WPX_FTP_SERVER_DIR }}/public_html/ec_site/
+          local-dir: ./public_html/ec_site/
+
+      - name: Sync files for include
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.WPX_FTP_SERVER }}
+          username: ${{ secrets.WPX_FTP_USERNAME }}
+          password: ${{ secrets.WPX_FTP_PASSWORD }}
+          server-dir: ${{ secrets.WPX_FTP_SERVER_DIR }}/include/
+          local-dir: ./include/

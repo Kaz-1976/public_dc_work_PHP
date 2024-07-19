@@ -1,0 +1,38 @@
+services:
+  mysql:
+    container_name: public-dc-mysql-latest
+    image: mysql:latest
+    restart: always
+    volumes:
+      - type: bind
+        source: C:\Docker\Volume\public_dc_work_PHP\MySQL\
+        target: /var/lib/mysql
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=ipenw023
+      - MYSQL_DATABASE=ec_site
+      - MYSQL_USER=ec_admin
+      - MYSQL_PASSWORD=ipenw023
+      - "TZ=Asia/Tokyo"
+  phpmyadmin:
+    container_name: public-dc-phpmyadmin-latest
+    image: phpmyadmin:latest
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1
+  php:
+    container_name: public-dc-php-latest
+    build: ./docker/php-latest
+    restart: always
+    volumes:
+      - type: bind
+        source: .\public_html
+        target: /var/www/html
+      - type: bind
+        source: .\include
+        target: /var/www/include
+    ports:
+      - 80:80
